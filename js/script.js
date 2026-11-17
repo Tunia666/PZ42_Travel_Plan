@@ -55,12 +55,8 @@ async function buildPlan() {
     planButton.disabled = false;
   }
 }
-planButton.addEventListener("click", buildPlan);
-// Вариант с .then() уже работает. Ваша задача — переписать его.
-// TODO 1. Создайте async function buildPlan().
-// TODO 2. Используйте три await последовательно: getCity, getWeather, getAdvice.
-// TODO 3. Добавьте try/catch/finally для результата, ошибки и разблокировки кнопки.
-// TODO 4. Подключите новую функцию к кнопке, убрав цепочку .then().
+planButton.addEventListener("click", buildPlan); 
+
 planButton.addEventListener("click", () => {
   planButton.disabled = true;
   result.textContent = "Составляем совет...";
