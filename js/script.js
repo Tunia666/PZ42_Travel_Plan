@@ -4,8 +4,6 @@ const citySelect = document.querySelector("#city-select");
 const planButton = document.querySelector("#plan-button");
 const result = document.querySelector("#result");
 const status = document.querySelector("#status");
-
-// Эти три функции уже возвращают Promise. Их переписывать не нужно.
 function getCity(code) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -35,12 +33,31 @@ function getAdvice(data) {
     }, 500);
   });
 }
+async function buildPlan() {
+  planButton.disabled = true;
+  result.textContent = "Составляем совет...";
+  status.className = "status status--working";
+  status.textContent = "Получаем данные...";
 
-// Вариант с .then() уже работает. Ваша задача — переписать его.
-// TODO 1. Создайте async function buildPlan().
-// TODO 2. Используйте три await последовательно: getCity, getWeather, getAdvice.
-// TODO 3. Добавьте try/catch/finally для результата, ошибки и разблокировки кнопки.
-// TODO 4. Подключите новую функцию к кнопке, убрав цепочку .then().
+  try {
+    const city = await getCity(citySelect.value);
+    const weather = await getWeather(city);
+    const advice = await getAdvice(weather);
+
+    result.textContent = advice;
+    status.className = "status status--success";
+    status.textContent = "Совет готов.";
+  } catch (error) {
+    result.textContent = error.message;
+    status.className = "status status--error";
+    status.textContent = "Не удалось составить совет.";
+  } finally {
+    planButton.disabled = false;
+  }
+}
+
+planButton.addEventListener("click", buildPlan);
+
 planButton.addEventListener("click", () => {
   planButton.disabled = true;
   result.textContent = "Составляем совет...";
